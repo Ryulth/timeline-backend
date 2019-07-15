@@ -45,6 +45,17 @@ public class JwtService implements TokenService {
         return resultMap;
     }
 
+    @Override
+    public String getEmailFromToken(String token) throws IllegalAccessException {
+        try {
+            String tokenBody = token.replace("bearer ","");
+            Claims claims = Jwts.parser().setSigningKey(this.generateKey(refreshSecretKey))
+                    .parseClaimsJws(tokenBody).getBody(); // 정상 수행된다면 해당 토큰은 정상토큰
+            return claims.get("email").toString();
+        } catch (JwtException e) {
+            throw new IllegalAccessException(e.getMessage());
+        }
+    }
 
     private byte[] generateKey(String secretKey) {
         byte[] key = null;
