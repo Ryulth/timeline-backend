@@ -1,8 +1,11 @@
 package com.ryulth.timeline.account.service;
 
+import com.ryulth.timeline.account.dto.LoginDto;
 import com.ryulth.timeline.account.dto.RegisterDto;
 import com.ryulth.timeline.account.entity.User;
+import com.ryulth.timeline.account.exception.EmailNotFoundException;
 import com.ryulth.timeline.account.repository.UserRepository;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,8 +46,17 @@ public class AccountService {
         return getToken(user);
     }
 
-    public boolean duplicateEmail(String userEmail){
+    public boolean duplicateEmail(String userEmail) {
         return userRepository.existsByEmail(userEmail);
+    }
+
+    public Map<String, Object> login(LoginDto loginDto) {
+        User user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(EmailNotFoundException::new);
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Incorrect password");
+        }
+        return getToken(user);
     }
 
     private Map<String, Object> getToken(User user) {

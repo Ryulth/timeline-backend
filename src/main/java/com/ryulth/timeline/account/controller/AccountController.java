@@ -1,6 +1,8 @@
 package com.ryulth.timeline.account.controller;
 
+import com.ryulth.timeline.account.dto.LoginDto;
 import com.ryulth.timeline.account.dto.RegisterDto;
+import com.ryulth.timeline.account.exception.EmailNotFoundException;
 import com.ryulth.timeline.account.service.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
@@ -38,6 +41,19 @@ public class AccountController {
         }
     }
 
+    @PostMapping("apis/accounts/login")
+    @ApiOperation(value="Login API", notes="로그인을 하면 토큰을 반환하는 API. (Authorization Header 필요 없습니다. Swagger 전역 설정 원인)")
+    public ResponseEntity login(
+            @RequestBody LoginDto loginDto) {
+        try {
+            return new ResponseEntity<>(accountService.login(loginDto), httpHeaders, HttpStatus.OK);
+        } catch (EmailNotFoundException | BadCredentialsException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            log.error(e.toString());
+            return new ResponseEntity<>(Collections.singletonMap("error","INTERNAL SERVER ERROR"),httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping("apis/accounts/duplicate/{email}")
     @ApiOperation(value="Duplicate API", notes="회원가입시 회원 아이디(email) 중복 체크하는 API. (Authorization Header 필요 없습니다. Swagger 전역 설정 원인)")
     public ResponseEntity duplicate(
