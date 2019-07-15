@@ -59,6 +59,14 @@ public class AccountService {
         return getToken(user);
     }
 
+    public Map<String, Object> updateAccessToken(String refreshToken) throws IllegalAccessException {
+        String email = tokenService.getEmailFromToken(refreshToken);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(EmailNotFoundException::new);
+
+        return getToken(user);
+    }
+
     private Map<String, Object> getToken(User user) {
         Map<String, Object> body = Stream.of(
                 new AbstractMap.SimpleEntry<>("email", user.getEmail()))
