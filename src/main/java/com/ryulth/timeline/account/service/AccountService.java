@@ -60,7 +60,7 @@ public class AccountService {
     }
 
     public Map<String, Object> updateAccessToken(String refreshToken) throws IllegalAccessException {
-        String email = tokenService.getEmailFromToken(refreshToken);
+        String email = tokenService.getEmailFromRefreshToken(refreshToken);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(EmailNotFoundException::new);
 
