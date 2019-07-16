@@ -1,5 +1,6 @@
 package com.ryulth.timeline.account.service;
 
+import com.ryulth.timeline.apis.security.UnauthorizedException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -46,17 +47,24 @@ public class JwtService implements TokenService {
     }
 
     @Override
-    public String getEmailFromToken(String token) throws IllegalAccessException {
+    public String getEmailFromRefreshToken(String token) throws IllegalAccessException {
+        return getEmailFromToken(token,refreshSecretKey);
+    }
+
+    @Override
+    public String getEmailFromAccessToken(String token) throws IllegalAccessException {
+        return getEmailFromToken(token,accessSecretKey);
+    }
+    private String getEmailFromToken(String token,String secretKey) throws IllegalAccessException {
         try {
             String tokenBody = token.replace("bearer ","");
-            Claims claims = Jwts.parser().setSigningKey(this.generateKey(refreshSecretKey))
+            Claims claims = Jwts.parser().setSigningKey(this.generateKey(secretKey))
                     .parseClaimsJws(tokenBody).getBody(); // 정상 수행된다면 해당 토큰은 정상토큰
             return claims.get("email").toString();
         } catch (JwtException e) {
             throw new IllegalAccessException(e.getMessage());
         }
     }
-
     private byte[] generateKey(String secretKey) {
         byte[] key = null;
         try {
@@ -65,6 +73,18 @@ public class JwtService implements TokenService {
             e.printStackTrace();
         }
         return key;
+    }
+
+    @Override
+    public boolean isUsable(String jwt) {
+        try{
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(this.generateKey(accessSecretKey))
+                    .parseClaimsJws(jwt);
+            return true;
+        }catch (Exception e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
     }
 
 }
