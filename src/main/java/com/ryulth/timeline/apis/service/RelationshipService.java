@@ -51,19 +51,35 @@ public class RelationshipService {
     }
 
     public Map<String, Object> acceptRelationShip(String userEmail, String requestEmail, FriendAcceptDto friendAcceptDto) {
-        if (!friendAcceptDto.isAccept()) {
-            return Collections.singletonMap("accept", false);
-        }
-        Relationship friendRelationship =
+        Relationship relationship =
                 relationshipRepository.findByUserEmailAndRequestEmail(userEmail, requestEmail)
                         .orElseThrow(EntityNotFoundException::new);
 
-        if (friendRelationship.getRelationshipStatus().equals(RelationshipStatus.REQUEST)) {
-            friendRelationship.setRelationshipStatus(RelationshipStatus.FRIEND);
-            relationshipRepository.save(friendRelationship);
+        if (!friendAcceptDto.isAccept()) {
+            relationshipRepository.deleteById(relationship.getId());
+            return Collections.singletonMap("accept", false);
+        }
+
+
+        if (relationship.getRelationshipStatus().equals(RelationshipStatus.REQUEST)) {
+            relationship.setRelationshipStatus(RelationshipStatus.FRIEND);
+            relationshipRepository.save(relationship);
+            saveRequestUserRelationship(userEmail,requestEmail);
             return Collections.singletonMap("accept", true);
         }
         return Collections.singletonMap("accept", false);
+    }
+
+    private void saveRequestUserRelationship(String userEmail, String requestEmail) {
+        Relationship relationship = relationshipRepository.findByUserEmailAndRequestEmail(
+                requestEmail, userEmail)
+                .orElse(Relationship.builder()
+                        .userEmail(requestEmail)
+                        .requestEmail(userEmail)
+                        .relationshipStatus(RelationshipStatus.FRIEND)
+                        .build());
+        relationship.setRelationshipStatus(RelationshipStatus.FRIEND);
+        relationshipRepository.save(relationship);
     }
 
     public Map<String, Object> recommendRelationship(String userEmail) {
@@ -82,16 +98,20 @@ public class RelationshipService {
     private List getFriendRelationships(String userEmail, List<User> usersByState) {
         List<FriendInfoDto> friendInfoDtos = new ArrayList<>();
         for (User user : usersByState) {
-            friendInfoDtos.add(
-                    FriendInfoDto.builder()
-                            .email(user.getEmail())
-                            .username(user.getUsername())
-                            .state(user.getState())
-                            .school(user.getSchool())
-                            .birth(user.getBirth())
-                            .relationshipStatus(getRelationshipStatus(userEmail, user.getEmail()))
-                            .build()
-            );
+            RelationshipStatus relationshipStatus = getRelationshipStatus(userEmail, user.getEmail());
+            if (!relationshipStatus.equals(RelationshipStatus.FRIEND)) {
+                friendInfoDtos.add(
+                        FriendInfoDto.builder()
+                                .email(user.getEmail())
+                                .username(user.getUsername())
+                                .state(user.getState())
+                                .school(user.getSchool())
+                                .birth(user.getBirth())
+                                .relationshipStatus(relationshipStatus)
+                                .build()
+                );
+            }
+
         }
         return friendInfoDtos;
     }
