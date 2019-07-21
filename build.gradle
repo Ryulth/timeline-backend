@@ -31,6 +31,12 @@ repositories {
     maven { url "https://repo.spring.io/libs-milestone" }
     maven { url "https://repo.spring.io/libs-snapshot" }
 }
+dependencyManagement {
+    imports {
+        mavenBom 'com.amazonaws:aws-java-sdk-bom:1.11.228'
+    }
+}
+
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
@@ -63,4 +69,6 @@ dependencies {
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+    compile 'com.amazonaws:aws-java-sdk-s3'
 }
