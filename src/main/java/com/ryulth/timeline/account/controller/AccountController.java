@@ -36,7 +36,7 @@ public class AccountController {
         try {
             return new ResponseEntity<>(accountService.register(registerDto), httpHeaders, HttpStatus.OK);
         } catch (EntityExistsException e) {
-            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.CONFLICT);
         } catch (Exception e) {
             log.error(e.toString());
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,7 +50,7 @@ public class AccountController {
         try {
             return new ResponseEntity<>(accountService.login(loginDto), httpHeaders, HttpStatus.OK);
         } catch (EmailNotFoundException | BadCredentialsException e) {
-            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             log.error(e.toString());
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,7 +63,7 @@ public class AccountController {
             @PathVariable("email") String email) {
         try {
             if (accountService.duplicateEmail(email)) {
-                return new ResponseEntity<>(Collections.singletonMap("duplicate", true), httpHeaders, HttpStatus.OK);
+                return new ResponseEntity<>(Collections.singletonMap("duplicate", true), httpHeaders, HttpStatus.CONFLICT);
             } else {
                 return new ResponseEntity<>(Collections.singletonMap("duplicate", false), httpHeaders, HttpStatus.OK);
             }
@@ -80,7 +80,7 @@ public class AccountController {
         try {
             return new ResponseEntity<>(accountService.updateAccessToken(refreshToken), httpHeaders, HttpStatus.OK);
         } catch (IllegalAccessException | EmailNotFoundException e) {
-            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             log.error(e.toString());
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
