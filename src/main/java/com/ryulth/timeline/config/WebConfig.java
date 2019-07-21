@@ -12,8 +12,11 @@ public class WebConfig implements WebMvcConfigurer{
 
     private @Value("${allowed.origin}")
     String origin;
-    private static final String[] INCLUDE_PATHS = {
-            "/apis/**"
+    private static final String[] EXCLUDE_PATHS = {
+            "/accounts/**",
+            "/swagger-ui.html/**",
+            "/webjars/**",
+            "/swagger-resources/**",
     };
 
     private final TokenInterceptor tokenInterceptor;
@@ -25,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns(INCLUDE_PATHS);
+                .excludePathPatterns(EXCLUDE_PATHS);
     }
 
     @Override

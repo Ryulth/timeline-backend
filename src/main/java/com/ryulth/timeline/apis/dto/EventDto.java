@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class EventDto {
+    protected EventDto(){}
     private Long id;
     private String authorEmail;
     private String content;

@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum  RelationshipStatus {
-    APPLY,
-    ACCEPT,
+    NONE,
+    REQUEST,
+    FRIEND,
     BLOCK
 }

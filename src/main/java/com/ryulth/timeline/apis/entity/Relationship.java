@@ -14,6 +14,8 @@ import javax.persistence.*;
 @Table(name = "relationship")
 @ToString
 public class Relationship {
+    protected Relationship() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +24,8 @@ public class Relationship {
 
     @Column(name = "relationship_user_email")
     private String userEmail;
-    @Column(name = "relationship_friend_email")
-    private String friendEmail;
+    @Column(name = "relationship_request_email")
+    private String requestEmail;
 
     @Column(name = "relationship_status")
     @Enumerated(EnumType.STRING)

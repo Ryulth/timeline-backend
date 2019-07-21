@@ -1,4 +1,4 @@
-package com.ryulth.timeline.account.dto;
+package com.ryulth.timeline.apis.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @ToString
-public class LoginDto {
-    protected LoginDto(){}
-    private String email;
-    private String password;
+public class FriendAcceptDto {
+    protected FriendAcceptDto(){}
+    private boolean accept;
 }
