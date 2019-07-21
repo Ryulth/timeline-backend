@@ -9,6 +9,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @ToString
-public class ApplyFriendDto {
-    String applyEmail;
+public class FriendRequestDto {
+    protected FriendRequestDto(){}
+    private String requestEmail;
 }

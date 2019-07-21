@@ -12,5 +12,6 @@ import java.util.Optional;
 public interface RelationshipRepository extends JpaRepository<Relationship,Long> {
     List<Relationship> findAllByUserEmail(String userEmail);
     List<Relationship> findAllByUserEmailAndRelationshipStatus(String userEmail, RelationshipStatus relationshipStatus);
-    Optional<Relationship> findByUserEmailAndFriendEmail(String userEmail,String friendEmail);
+    Boolean existsByUserEmailAndRequestEmail(String userEmail,String requestEmail);
+    Optional<Relationship> findByUserEmailAndRequestEmail(String userEmail,String requestEmail);
 }

@@ -10,6 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class EventFileDto {
+    protected EventFileDto(){}
     private String thumbUrl;
     private String url;
 }

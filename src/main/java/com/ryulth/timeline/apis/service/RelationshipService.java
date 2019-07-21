@@ -1,9 +1,9 @@
 package com.ryulth.timeline.apis.service;
 
-import com.ryulth.timeline.account.dto.UserInfoDto;
 import com.ryulth.timeline.account.entity.User;
 import com.ryulth.timeline.account.repository.UserRepository;
-import com.ryulth.timeline.apis.dto.ApplyFriendDto;
+import com.ryulth.timeline.apis.dto.FriendAcceptDto;
+import com.ryulth.timeline.apis.dto.FriendInfoDto;
 import com.ryulth.timeline.apis.entity.Relationship;
 import com.ryulth.timeline.apis.entity.RelationshipStatus;
 import com.ryulth.timeline.apis.repository.RelationshipRepository;
@@ -26,35 +26,40 @@ public class RelationshipService {
         this.userRepository = userRepository;
     }
 
-    public Map<String, Object> applyRelationship(String userEmail, String applyEmail) {
-
+    public Map<String, Object> requestRelationship(String userEmail, String requestEmail) {
+        if (userEmail.equals(requestEmail)) {
+            return Collections.singletonMap("request", false);
+        }
         Relationship friendRelationship =
-                relationshipRepository.findByUserEmailAndFriendEmail(applyEmail, userEmail)
+                relationshipRepository.findByUserEmailAndRequestEmail(requestEmail, userEmail)
                         .orElse(null);
 
         if (friendRelationship == null) {
             relationshipRepository.save(Relationship.builder()
                     .userEmail(userEmail)
-                    .friendEmail(applyEmail)
-                    .relationshipStatus(RelationshipStatus.APPLY)
+                    .requestEmail(requestEmail)
+                    .relationshipStatus(RelationshipStatus.REQUEST)
                     .build());
-            return Collections.singletonMap("apply", true);
+            return Collections.singletonMap("request", true);
         }
 
         if (friendRelationship.getRelationshipStatus().equals(RelationshipStatus.BLOCK)) {
             throw new RelationshipBlockException();
         }
 
-        return Collections.singletonMap("apply", false);
+        return Collections.singletonMap("request", false);
     }
 
-    public Map<String, Object> acceptRelationShip(String userEmail, String applyEmail) {
+    public Map<String, Object> acceptRelationShip(String userEmail, String requestEmail, FriendAcceptDto friendAcceptDto) {
+        if (!friendAcceptDto.isAccept()) {
+            return Collections.singletonMap("accept", false);
+        }
         Relationship friendRelationship =
-                relationshipRepository.findByUserEmailAndFriendEmail(userEmail, applyEmail)
+                relationshipRepository.findByUserEmailAndRequestEmail(userEmail, requestEmail)
                         .orElseThrow(EntityNotFoundException::new);
 
-        if (friendRelationship.getRelationshipStatus().equals(RelationshipStatus.APPLY)) {
-            friendRelationship.setRelationshipStatus(RelationshipStatus.ACCEPT);
+        if (friendRelationship.getRelationshipStatus().equals(RelationshipStatus.REQUEST)) {
+            friendRelationship.setRelationshipStatus(RelationshipStatus.FRIEND);
             relationshipRepository.save(friendRelationship);
             return Collections.singletonMap("accept", true);
         }
@@ -67,69 +72,73 @@ public class RelationshipService {
 
         String userState = user.getState();
 
-        List<User> stateUsers = userRepository.findAllByState(userState);
+        List<User> usersByState = userRepository.findAllByState(userState);
+        usersByState.removeIf(u -> relationshipRepository.existsByUserEmailAndRequestEmail(u.getEmail(), userEmail));
+        usersByState.remove(user);
 
-        stateUsers.removeIf(u -> isRelationship(userEmail, u.getEmail()));
+        return Collections.singletonMap("users", getFriendRelationships(userEmail, usersByState));
+    }
 
-        List<UserInfoDto> userInfoDtos = new ArrayList<>();
-
-        for (User u : stateUsers) {
-            userInfoDtos.add(
-                    UserInfoDto.builder()
-                            .email(u.getEmail())
-                            .username(u.getUsername())
-                            .state(u.getState())
-                            .school(u.getSchool())
-                            .birth(u.getBirth())
+    private List getFriendRelationships(String userEmail, List<User> usersByState) {
+        List<FriendInfoDto> friendInfoDtos = new ArrayList<>();
+        for (User user : usersByState) {
+            friendInfoDtos.add(
+                    FriendInfoDto.builder()
+                            .email(user.getEmail())
+                            .username(user.getUsername())
+                            .state(user.getState())
+                            .school(user.getSchool())
+                            .birth(user.getBirth())
+                            .relationshipStatus(getRelationshipStatus(userEmail, user.getEmail()))
                             .build()
             );
         }
-
-        return Collections.singletonMap("users", userInfoDtos);
+        return friendInfoDtos;
     }
 
-    public Map<String, Object> getApplys(String userEmail) {
-        return Collections.singletonMap("users", getRelationships(userEmail,RelationshipStatus.APPLY));
+    private RelationshipStatus getRelationshipStatus(String userEmail, String friendEmail) {
+        Relationship relationship =
+                relationshipRepository.findByUserEmailAndRequestEmail(userEmail, friendEmail).orElse(null);
+        if (relationship == null) {
+            return RelationshipStatus.NONE;
+        }
+        return relationship.getRelationshipStatus();
     }
 
-    public Map<String, Object> getAccepts(String userEmail) {
-        return Collections.singletonMap("users", getRelationships(userEmail,RelationshipStatus.ACCEPT));
+    public Map<String, Object> getRequests(String userEmail) {
+        return Collections.singletonMap("users", getRelationships(userEmail, RelationshipStatus.REQUEST));
     }
 
-    private List<UserInfoDto> getRelationships(String userEmail,RelationshipStatus relationshipStatus){
+    public Map<String, Object> getFriends(String userEmail) {
+        return Collections.singletonMap("users", getRelationships(userEmail, RelationshipStatus.FRIEND));
+    }
+
+    private List getRelationships(String userEmail, RelationshipStatus relationshipStatus) {
         List<Relationship> relationships =
                 relationshipRepository.findAllByUserEmailAndRelationshipStatus(userEmail, relationshipStatus);
 
-        List<UserInfoDto> userInfoDtos = new ArrayList<>();
+        List<FriendInfoDto> friendInfoDtos = new ArrayList<>();
 
         for (Relationship relationship : relationships) {
             User user = userRepository.findByEmail(
-                    relationship.getFriendEmail()
+                    relationship.getRequestEmail()
             ).orElse(null);
             if (user != null) {
-                userInfoDtos.add(
-                        UserInfoDto.builder()
+                friendInfoDtos.add(
+                        FriendInfoDto.builder()
                                 .email(user.getEmail())
                                 .username(user.getUsername())
                                 .state(user.getState())
                                 .school(user.getSchool())
                                 .birth(user.getBirth())
+                                .relationshipStatus(relationshipStatus)
                                 .build()
                 );
             }
 
         }
-        return userInfoDtos;
-    };
-    private boolean isRelationship(String userEmail, String friendEmail) {
-        Relationship relationship =
-                relationshipRepository.findByUserEmailAndFriendEmail(userEmail, friendEmail).orElse(null);
-        if (relationship == null) {
-            return false;
-        }
-        if (relationship.getRelationshipStatus().equals(RelationshipStatus.ACCEPT)) {
-            return true;
-        }
-        return false;
+        return friendInfoDtos;
     }
+
+
 }

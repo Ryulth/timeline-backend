@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class NewEventDto {
+    protected NewEventDto(){}
     private String title;
     private String content;
     @JsonProperty("files")
