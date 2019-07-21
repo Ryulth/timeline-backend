@@ -20,6 +20,9 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
         try {
         final String token = request.getHeader(HEADER_AUTH).split("bearer ")[1];
             //TODO refactor

@@ -16,7 +16,6 @@ import java.util.List;
 public class EventDto {
     private Long id;
     private String authorEmail;
-    private String title;
     private String content;
     private Calendar createTime;
     private Calendar updateTime;

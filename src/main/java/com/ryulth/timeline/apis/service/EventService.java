@@ -33,14 +33,13 @@ public class EventService {
         List<EventFileDto> eventFileDtos = newEventDto.getFiles();
         for (EventFileDto eventFileDto : eventFileDtos) {
             eventFiles.add(EventFile.builder()
-                    .name(eventFileDto.getName())
-                    .src(eventFileDto.getSrc())
+                    .thumbUrl(eventFileDto.getThumbUrl())
+                    .url(eventFileDto.getUrl())
                     .build());
         }
 
         Event event = Event.builder()
                 .authorEmail(authorEmail)
-                .title(newEventDto.getTitle())
                 .content(newEventDto.getContent())
                 .eventFiles(eventFiles)
                 .build();
@@ -61,8 +60,8 @@ public class EventService {
         List<EventFileDto> eventFileDtos = new ArrayList<>();
         for (EventFile eventFile : event.getEventFiles()) {
             eventFileDtos.add(EventFileDto.builder()
-                    .name(eventFile.getName())
-                    .src(eventFile.getSrc())
+                    .thumbUrl(eventFile.getThumbUrl())
+                    .url(eventFile.getUrl())
                     .build());
         }
 
@@ -70,7 +69,6 @@ public class EventService {
         EventDto eventDto = EventDto.builder()
                 .id(event.getId())
                 .authorEmail(event.getAuthorEmail())
-                .title(event.getTitle())
                 .content(event.getContent())
                 .createTime(event.getCreateTime())
                 .updateTime(event.getUpdateTime())

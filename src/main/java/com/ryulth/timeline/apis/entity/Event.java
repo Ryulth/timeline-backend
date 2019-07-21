@@ -29,9 +29,6 @@ public class Event {
     @Column(name = "event_author_email")
     private String authorEmail;
 
-    @Column(name = "event_title")
-    private String title;
-
     @Lob
     @Column(name = "event_content")
     private String content;
