@@ -29,7 +29,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @PostMapping("apis/event")
+    @PostMapping("event")
     @ApiOperation(value = "New Event API", notes = "이벤트 작성 API")
     public ResponseEntity newEvent(
             HttpServletRequest httpServletRequest,
@@ -44,7 +44,7 @@ public class EventController {
         }
     }
 
-    @GetMapping("apis/events/{eventId}")
+    @GetMapping("events/{eventId}")
     @ApiOperation(value = "Get Event API", notes = "이벤트 ID 로 가져온다.")
     public ResponseEntity newEvent(
             HttpServletRequest httpServletRequest,

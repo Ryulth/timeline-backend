@@ -9,7 +9,6 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @ToString
-public class EventFileDto {
-    private String thumbUrl;
-    private String url;
+public class ApplyFriendDto {
+    String applyEmail;
 }

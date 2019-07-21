@@ -22,10 +22,10 @@ public class EventFile {
     @Column(name = "event_file_id")
     private Long id;
 
-    @Column(name = "event_file_name")
-    private String name;
+    @Column(name = "event_image_thumbUrl")
+    private String thumbUrl;
 
-    @Column(name = "event_file_src")
-    private String src;
+    @Column(name = "event_image_url")
+    private String url;
 
 }

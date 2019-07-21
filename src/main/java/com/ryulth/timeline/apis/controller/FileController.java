@@ -30,7 +30,7 @@ public class FileController {
     }
 
 
-    @PostMapping("apis/image")
+    @PostMapping("image")
     @ResponseBody
     public ResponseEntity upload(
             HttpServletRequest httpServletRequest,
