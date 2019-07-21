@@ -30,9 +30,9 @@ public class FileController {
     }
 
 
-    @PostMapping("image")
+    @PostMapping("files/image")
     @ResponseBody
-    public ResponseEntity upload(
+    public ResponseEntity imageUpload(
             HttpServletRequest httpServletRequest,
             @RequestParam("data") MultipartFile multipartFile
     ) {

@@ -1,6 +1,5 @@
 package com.ryulth.timeline.account.service;
 
-import com.ryulth.timeline.apis.security.UnauthorizedException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -83,7 +82,7 @@ public class JwtService implements TokenService {
                     .parseClaimsJws(jwt);
             return true;
         }catch (Exception e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw e;
         }
     }
 
