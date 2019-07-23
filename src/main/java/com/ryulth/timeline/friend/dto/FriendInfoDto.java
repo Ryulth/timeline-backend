@@ -1,7 +1,7 @@
-package com.ryulth.timeline.apis.dto;
+package com.ryulth.timeline.friend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ryulth.timeline.apis.entity.RelationshipStatus;
+import com.ryulth.timeline.friend.entity.RelationshipStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

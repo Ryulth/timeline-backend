@@ -1,4 +1,4 @@
-package com.ryulth.timeline.apis.dto;
+package com.ryulth.timeline.friend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
