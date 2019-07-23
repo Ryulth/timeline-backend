@@ -1,4 +1,4 @@
-package com.ryulth.timeline.apis.service;
+package com.ryulth.timeline.friend.service;
 
 public class RelationshipBlockException extends RuntimeException {
     public RelationshipBlockException() {

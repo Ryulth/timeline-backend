@@ -1,4 +1,4 @@
-package com.ryulth.timeline.apis.entity;
+package com.ryulth.timeline.friend.entity;
 
 import lombok.Getter;
 
@@ -7,5 +7,6 @@ public enum  RelationshipStatus {
     NONE,
     REQUEST,
     FRIEND,
-    BLOCK
+    BLOCK,
+    REFUSE
 }

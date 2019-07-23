@@ -1,4 +1,4 @@
-package com.ryulth.timeline.apis.entity;
+package com.ryulth.timeline.friend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
