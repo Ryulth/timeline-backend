@@ -19,7 +19,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'net.ltgt.apt-idea'
 apply plugin: 'net.ltgt.apt-eclipse'
 
-group 'com.ryulth.timeline'
+group 'com.ryulth.sns'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
