@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer{
             "/files/**",
             "/friend/**",
             "/friends/**",
+            "/profile/**"
     };
 
     private final TokenInterceptor tokenInterceptor;

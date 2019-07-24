@@ -16,4 +16,5 @@ public class UserInfoDto {
     private String state;
     private String school;
     private String birth;
+    private String imageUrl;
 }

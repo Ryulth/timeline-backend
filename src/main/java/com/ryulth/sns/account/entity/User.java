@@ -39,4 +39,7 @@ public class User {
 
     @Column(name = "user_birth")
     private String birth;
+
+    @Column(name = "user_image_url")
+    private String imageUrl;
 }
