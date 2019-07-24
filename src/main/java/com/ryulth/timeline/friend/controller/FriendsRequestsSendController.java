@@ -41,7 +41,7 @@ public class FriendsRequestsSendController {
         } catch (RelationshipBlockException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
-            log.error(e.toString());
+            e.printStackTrace();
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -55,7 +55,7 @@ public class FriendsRequestsSendController {
             String email = httpServletRequest.getSession().getAttribute("email").toString();
             return new ResponseEntity<>(friendsRequestsSendService.getFriendsRequestsSends(email), httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
-            log.error(e.toString());
+            e.printStackTrace();
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -71,7 +71,7 @@ public class FriendsRequestsSendController {
 
             return new ResponseEntity<>(friendsRequestsSendService.deleteFriendsRequestsSend(email, requestEmail), httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
-            log.error(e.toString());
+            e.printStackTrace();
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

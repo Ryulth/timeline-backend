@@ -41,7 +41,11 @@ public class FriendsRequestsSendService {
         }
         Relationship friendRelationship =
                 relationshipRepository.findByUserEmailAndRequestEmail(requestEmail, userEmail)
-                        .orElse(null);
+                        .orElse(Relationship.builder()
+                                .userEmail(userEmail)
+                                .requestEmail(requestEmail)
+                                .relationshipStatus(RelationshipStatus.NONE)
+                                .build());
 
         if (friendRelationship.getRelationshipStatus().equals(RelationshipStatus.BLOCK)) {
             throw new RelationshipBlockException();
