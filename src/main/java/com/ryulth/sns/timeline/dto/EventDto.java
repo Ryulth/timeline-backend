@@ -17,6 +17,7 @@ public class EventDto {
     protected EventDto(){}
     private Long id;
     private String authorEmail;
+    private String authorUsername;
     private String content;
     private Calendar createTime;
     private Calendar updateTime;

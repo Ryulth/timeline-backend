@@ -17,4 +17,5 @@ public class RegisterDto {
     private String state;
     private String school;
     private String birth;
+    private String imageUrl;
 }

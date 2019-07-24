@@ -51,8 +51,8 @@ public class EventController {
             @PathVariable("eventId") Long eventId
     ) {
         try {
-            String email = httpServletRequest.getSession().getAttribute("email").toString();
-            return new ResponseEntity<>(eventService.getEventById(eventId, email), httpHeaders, HttpStatus.OK);
+            String accessEmail = httpServletRequest.getSession().getAttribute("email").toString();
+            return new ResponseEntity<>(eventService.getEvent(eventId, accessEmail), httpHeaders, HttpStatus.OK);
         } catch (UnauthorizedException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
         } catch (EntityNotFoundException e) {

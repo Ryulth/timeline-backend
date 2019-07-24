@@ -1,6 +1,8 @@
 package com.ryulth.sns.timeline.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ryulth.sns.account.entity.User;
+import com.ryulth.sns.account.repository.UserRepository;
 import com.ryulth.sns.timeline.dto.EventDto;
 import com.ryulth.sns.timeline.dto.EventFileDto;
 import com.ryulth.sns.timeline.dto.NewEventDto;
@@ -18,11 +20,12 @@ import java.util.Map;
 
 @Service
 public class EventService {
-    public final EventRepository eventRepository;
-    public final ObjectMapper objectMapper;
-
-    public EventService(EventRepository eventRepository) {
+    private final EventRepository eventRepository;
+    private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
+    public EventService(EventRepository eventRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -49,14 +52,20 @@ public class EventService {
         return Collections.singletonMap("success", true);
     }
 
-    public Map<String, Object> getEventById(long eventId, String authorEmail) {
+    public Map<String, Object> getEvent(long eventId, String accessEmail) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        if (event.getIsPublic() == 0 && !event.getAuthorEmail().equals(authorEmail)) {
+        if (event.getIsPublic() == 0 && !event.getAuthorEmail().equals(accessEmail)) {
             throw new UnauthorizedException("Private Event Only Author Can Get Data");
         }
+        EventDto eventDto = getEventDtoByEvent(event);
 
+
+        return Collections.singletonMap("timeline", eventDto);
+    }
+
+    public EventDto getEventDtoByEvent(Event event){
         List<EventFileDto> eventFileDtos = new ArrayList<>();
         for (EventFile eventFile : event.getEventFiles()) {
             eventFileDtos.add(EventFileDto.builder()
@@ -64,11 +73,13 @@ public class EventService {
                     .url(eventFile.getUrl())
                     .build());
         }
-
+        User user = userRepository.findByEmail(event.getAuthorEmail())
+                .orElseThrow(EntityNotFoundException::new);
 
         EventDto eventDto = EventDto.builder()
                 .id(event.getId())
                 .authorEmail(event.getAuthorEmail())
+                .authorUsername(user.getUsername())
                 .content(event.getContent())
                 .createTime(event.getCreateTime())
                 .updateTime(event.getUpdateTime())
@@ -77,6 +88,6 @@ public class EventService {
                 .files(eventFileDtos)
                 .build();
 
-        return Collections.singletonMap("timeline", eventDto);
+        return eventDto;
     }
 }

@@ -40,6 +40,7 @@ public class AccountService {
                 .state(registerDto.getState())
                 .school(registerDto.getSchool())
                 .birth(registerDto.getBirth())
+                .imageUrl(registerDto.getImageUrl())
                 .build();
 
         userRepository.save(user);
