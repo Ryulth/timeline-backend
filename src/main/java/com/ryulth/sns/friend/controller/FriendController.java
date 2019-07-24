@@ -8,7 +8,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
@@ -33,8 +35,8 @@ public class FriendController {
             HttpServletRequest httpServletRequest
     ) {
         try {
-            String email = httpServletRequest.getSession().getAttribute("email").toString();
-            return new ResponseEntity<>(friendService.recommendFriends(email), httpHeaders, HttpStatus.OK);
+            String accessEmail = httpServletRequest.getSession().getAttribute("email").toString();
+            return new ResponseEntity<>(friendService.recommendFriends(accessEmail), httpHeaders, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
@@ -51,8 +53,23 @@ public class FriendController {
             HttpServletRequest httpServletRequest
     ) {
         try {
-            String email = httpServletRequest.getSession().getAttribute("email").toString();
-            return new ResponseEntity<>(friendService.getFriends(email), httpHeaders, HttpStatus.OK);
+            String accessEmail = httpServletRequest.getSession().getAttribute("email").toString();
+            return new ResponseEntity<>(friendService.getFriends(accessEmail), httpHeaders, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("friends/{requestEmail}")
+    @ApiOperation(value = "Friend delete API", notes = "친구 삭제")
+    public ResponseEntity deleteFriends(
+            HttpServletRequest httpServletRequest,
+            @PathVariable("requestEmail") String requestEmail
+    ) {
+        try {
+            String accessEmail = httpServletRequest.getSession().getAttribute("email").toString();
+            return new ResponseEntity<>(friendService.deleteFriend(accessEmail, requestEmail), httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);

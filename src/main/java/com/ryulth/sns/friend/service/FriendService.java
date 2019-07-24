@@ -42,4 +42,14 @@ public class FriendService {
                 relationshipRepository.findAllByRequestEmailAndRelationshipStatus(userEmail, RelationshipStatus.FRIEND);
         return Collections.singletonMap("users", relationshipService.getReceiveFriendInfoByRelationships(relationships));
     }
+
+    public Map<String, Object> deleteFriend(String userEmail,String requestEmail){
+        try {
+            relationshipRepository.deleteByUserEmailAndRequestEmail(userEmail,requestEmail);
+            relationshipRepository.deleteByUserEmailAndRequestEmail(requestEmail,userEmail);
+            return Collections.singletonMap("delete",true);
+        }catch (Exception e){
+            return Collections.singletonMap("delete",false);
+        }
+    }
 }
