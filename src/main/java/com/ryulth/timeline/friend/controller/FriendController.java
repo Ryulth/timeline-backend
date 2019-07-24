@@ -38,7 +38,7 @@ public class FriendController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
-            log.error(e.toString());
+            e.printStackTrace();
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
