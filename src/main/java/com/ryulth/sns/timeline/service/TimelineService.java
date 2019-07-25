@@ -24,7 +24,7 @@ public class TimelineService {
     }
 
     public Map<String, Object> getTimeline(String accessEmail, String authorEmail, int page) {
-        Pageable pageable = PageRequest.of(page, 5, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").descending());
         List<Event> events = eventRepository.findByAuthorEmail(authorEmail, pageable);
 
         if (!accessEmail.equals(authorEmail)) {
