@@ -1,4 +1,4 @@
-package com.ryulth.sns.account.service;
+package com.ryulth.sns.account.service.user;
 
 import org.springframework.stereotype.Service;
 

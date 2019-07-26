@@ -2,7 +2,7 @@ package com.ryulth.sns.account.controller;
 
 
 import com.ryulth.sns.account.dto.UserEditDto;
-import com.ryulth.sns.account.service.ProfileService;
+import com.ryulth.sns.account.service.user.ProfileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

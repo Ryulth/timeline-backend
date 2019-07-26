@@ -1,4 +1,4 @@
-package com.ryulth.sns.friend.dto;
+package com.ryulth.sns.account.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @ToString
-public class FriendRequestDto {
-    protected FriendRequestDto(){}
-    private String requestEmail;
+public class SuccessDto {
+    protected SuccessDto() {
+    }
+
+    private boolean success;
 }

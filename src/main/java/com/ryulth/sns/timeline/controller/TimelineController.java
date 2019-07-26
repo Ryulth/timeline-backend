@@ -38,7 +38,7 @@ public class TimelineController {
     ) {
         try {
             String accessEmail = httpServletRequest.getSession().getAttribute("email").toString();
-            return new ResponseEntity<>(timelineService.getTimeline(accessEmail,authorEmail,page), httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(timelineService.getUserTimeline(accessEmail,authorEmail,page), httpHeaders, HttpStatus.OK);
         } catch (UnauthorizedException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
         } catch (EntityNotFoundException e) {
@@ -48,5 +48,24 @@ public class TimelineController {
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    @GetMapping("timeline")
+    @ApiOperation(value = "Get Timeline API", notes = "각 유저의 타임라인을 가져온다.")
+    public ResponseEntity getUserTimeline(
+            HttpServletRequest httpServletRequest,
+            @RequestParam("page") int page
+    ) {
+        try {
+            String accessEmail = httpServletRequest.getSession().getAttribute("email").toString();
+            return new ResponseEntity<>(timelineService.getTimeline(accessEmail,page), httpHeaders, HttpStatus.OK);
+        } catch (UnauthorizedException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

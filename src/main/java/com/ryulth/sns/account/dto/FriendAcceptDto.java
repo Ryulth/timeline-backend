@@ -1,4 +1,4 @@
-package com.ryulth.sns.friend.dto;
+package com.ryulth.sns.account.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

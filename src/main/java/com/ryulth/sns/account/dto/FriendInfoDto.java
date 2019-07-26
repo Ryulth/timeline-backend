@@ -1,7 +1,7 @@
-package com.ryulth.sns.friend.dto;
+package com.ryulth.sns.account.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ryulth.sns.friend.entity.RelationshipStatus;
+import com.ryulth.sns.account.entity.RelationshipStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

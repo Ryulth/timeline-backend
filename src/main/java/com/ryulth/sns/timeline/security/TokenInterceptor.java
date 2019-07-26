@@ -1,6 +1,6 @@
 package com.ryulth.sns.timeline.security;
 
-import com.ryulth.sns.account.service.JwtService;
+import com.ryulth.sns.account.service.user.JwtService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 

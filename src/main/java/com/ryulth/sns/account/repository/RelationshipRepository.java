@@ -1,7 +1,7 @@
-package com.ryulth.sns.friend.repository;
+package com.ryulth.sns.account.repository;
 
-import com.ryulth.sns.friend.entity.Relationship;
-import com.ryulth.sns.friend.entity.RelationshipStatus;
+import com.ryulth.sns.account.entity.Relationship;
+import com.ryulth.sns.account.entity.RelationshipStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

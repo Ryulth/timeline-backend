@@ -1,7 +1,7 @@
-package com.ryulth.sns.friend.controller;
+package com.ryulth.sns.account.controller;
 
-import com.ryulth.sns.friend.dto.FriendAcceptDto;
-import com.ryulth.sns.friend.service.FriendsRequestsReceiveService;
+import com.ryulth.sns.account.dto.FriendAcceptDto;
+import com.ryulth.sns.account.service.friend.FriendsRequestsReceiveService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

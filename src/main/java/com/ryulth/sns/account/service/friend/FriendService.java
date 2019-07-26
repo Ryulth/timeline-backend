@@ -1,16 +1,16 @@
-package com.ryulth.sns.friend.service;
+package com.ryulth.sns.account.service.friend;
 
+import com.ryulth.sns.account.dto.FriendsDto;
+import com.ryulth.sns.account.dto.SuccessDto;
+import com.ryulth.sns.account.entity.Relationship;
+import com.ryulth.sns.account.entity.RelationshipStatus;
 import com.ryulth.sns.account.entity.User;
+import com.ryulth.sns.account.repository.RelationshipRepository;
 import com.ryulth.sns.account.repository.UserRepository;
-import com.ryulth.sns.friend.entity.Relationship;
-import com.ryulth.sns.friend.entity.RelationshipStatus;
-import com.ryulth.sns.friend.repository.RelationshipRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class FriendService {
@@ -24,7 +24,7 @@ public class FriendService {
         this.relationshipService = relationshipService;
     }
 
-    public Map<String, Object> recommendFriends(String userEmail) {
+    public FriendsDto recommendFriends(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -34,22 +34,23 @@ public class FriendService {
         usersByState.removeIf(u -> relationshipRepository.existsByUserEmailAndRequestEmail(u.getEmail(), userEmail));
         usersByState.remove(user);
 
-        return Collections.singletonMap("users", relationshipService.getFriendInfoByUserEmailAndUsers(userEmail, usersByState));
+        return relationshipService.getFriendInfoByUserEmailAndUsers(userEmail, usersByState);
     }
 
-    public Map<String, Object> getFriends(String userEmail) {
+    public FriendsDto getFriends(String userEmail) {
         List<Relationship> relationships =
                 relationshipRepository.findAllByRequestEmailAndRelationshipStatus(userEmail, RelationshipStatus.FRIEND);
-        return Collections.singletonMap("users", relationshipService.getReceiveFriendInfoByRelationships(relationships));
+
+        return relationshipService.getReceiveFriendInfoByRelationships(relationships);
     }
 
-    public Map<String, Object> deleteFriend(String userEmail,String requestEmail){
+    public SuccessDto deleteFriend(String userEmail, String requestEmail){
         try {
             relationshipRepository.deleteByUserEmailAndRequestEmail(userEmail,requestEmail);
             relationshipRepository.deleteByUserEmailAndRequestEmail(requestEmail,userEmail);
-            return Collections.singletonMap("delete",true);
+            return SuccessDto.builder().success(true).build();
         }catch (Exception e){
-            return Collections.singletonMap("delete",false);
+            return SuccessDto.builder().success(false).build();
         }
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "timeline")
+@Table(name = "event")
 @ToString
 public class Event {
     protected Event() {
