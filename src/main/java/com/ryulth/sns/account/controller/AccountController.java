@@ -3,7 +3,7 @@ package com.ryulth.sns.account.controller;
 import com.ryulth.sns.account.dto.LoginDto;
 import com.ryulth.sns.account.dto.RegisterDto;
 import com.ryulth.sns.account.exception.EmailNotFoundException;
-import com.ryulth.sns.account.service.AccountService;
+import com.ryulth.sns.account.service.user.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

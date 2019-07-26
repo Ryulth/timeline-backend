@@ -1,4 +1,4 @@
-package com.ryulth.sns.friend.entity;
+package com.ryulth.sns.account.entity;
 
 import lombok.Getter;
 

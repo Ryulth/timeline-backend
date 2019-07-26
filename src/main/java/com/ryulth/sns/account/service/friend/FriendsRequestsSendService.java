@@ -1,13 +1,13 @@
-package com.ryulth.sns.friend.service;
+package com.ryulth.sns.account.service.friend;
 
-import com.ryulth.sns.friend.entity.Relationship;
-import com.ryulth.sns.friend.entity.RelationshipStatus;
-import com.ryulth.sns.friend.repository.RelationshipRepository;
+import com.ryulth.sns.account.dto.FriendsDto;
+import com.ryulth.sns.account.dto.SuccessDto;
+import com.ryulth.sns.account.entity.Relationship;
+import com.ryulth.sns.account.entity.RelationshipStatus;
+import com.ryulth.sns.account.repository.RelationshipRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class FriendsRequestsSendService {
@@ -19,25 +19,24 @@ public class FriendsRequestsSendService {
         this.relationshipService = relationshipService;
     }
 
-    public Map<String, Object> getFriendsRequestsSends(String userEmail) {
+    public FriendsDto getFriendsRequestsSends(String userEmail) {
         List<Relationship> relationships =
                 relationshipRepository.findAllByUserEmailAndRelationshipStatus(userEmail, RelationshipStatus.REQUEST);
 
-        return Collections.singletonMap("users",
-                relationshipService.getSendFriendInfoByRelationships(relationships));
+        return                 relationshipService.getSendFriendInfoByRelationships(relationships);
     }
 
-    public Map<String, Object> deleteFriendsRequestsSend(String userEmail, String requestEmail) {
+    public SuccessDto deleteFriendsRequestsSend(String userEmail, String requestEmail) {
         relationshipRepository.deleteByUserEmailAndRequestEmail(userEmail, requestEmail);
-        return Collections.singletonMap("delete", true);
+        return SuccessDto.builder().success(true).build();
     }
 
-    public Map<String, Object> makeFriendsRequestsSend(String userEmail, String requestEmail) {
+    public SuccessDto makeFriendsRequestsSend(String userEmail, String requestEmail) {
         if (userEmail.equals(requestEmail)) {
-            return Collections.singletonMap("request", false);
+            return SuccessDto.builder().success(false).build();
         }
         if (relationshipRepository.existsByUserEmailAndRequestEmail(userEmail, requestEmail)) {
-            return Collections.singletonMap("request", false);
+            return SuccessDto.builder().success(false).build();
         }
         Relationship friendRelationship =
                 relationshipRepository.findByUserEmailAndRequestEmail(requestEmail, userEmail)
@@ -56,6 +55,6 @@ public class FriendsRequestsSendService {
                 .requestEmail(requestEmail)
                 .relationshipStatus(RelationshipStatus.REQUEST)
                 .build());
-        return Collections.singletonMap("request", true);
+        return SuccessDto.builder().success(true).build();
     }
 }

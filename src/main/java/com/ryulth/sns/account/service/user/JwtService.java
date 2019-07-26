@@ -1,4 +1,4 @@
-package com.ryulth.sns.account.service;
+package com.ryulth.sns.account.service.user;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,15 +1,15 @@
-package com.ryulth.sns.friend.service;
+package com.ryulth.sns.account.service.friend;
 
-import com.ryulth.sns.friend.dto.FriendAcceptDto;
-import com.ryulth.sns.friend.entity.Relationship;
-import com.ryulth.sns.friend.entity.RelationshipStatus;
-import com.ryulth.sns.friend.repository.RelationshipRepository;
+import com.ryulth.sns.account.dto.FriendAcceptDto;
+import com.ryulth.sns.account.dto.FriendsDto;
+import com.ryulth.sns.account.dto.SuccessDto;
+import com.ryulth.sns.account.entity.Relationship;
+import com.ryulth.sns.account.entity.RelationshipStatus;
+import com.ryulth.sns.account.repository.RelationshipRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class FriendsRequestsReceiveService {
@@ -21,14 +21,13 @@ public class FriendsRequestsReceiveService {
         this.relationshipRepository = relationshipRepository;
     }
 
-    public Map<String, Object> getFriendsRequestsReceives(String userEmail) {
+    public FriendsDto getFriendsRequestsReceives(String userEmail) {
         List<Relationship> relationships =
                 relationshipRepository.findAllByRequestEmailAndRelationshipStatus(userEmail, RelationshipStatus.REQUEST);
-        return Collections.singletonMap("users",
-                relationshipService.getReceiveFriendInfoByRelationships(relationships));
+        return relationshipService.getReceiveFriendInfoByRelationships(relationships);
     }
 
-    public Map<String, Object> editFriendsRequestsReceive(String userEmail, String requestEmail, FriendAcceptDto friendAcceptDto) {
+    public SuccessDto editFriendsRequestsReceive(String userEmail, String requestEmail, FriendAcceptDto friendAcceptDto) {
         Relationship relationship =
                 relationshipRepository.findByUserEmailAndRequestEmail(requestEmail, userEmail)
                         .orElseThrow(EntityNotFoundException::new);
@@ -36,16 +35,16 @@ public class FriendsRequestsReceiveService {
         if (!friendAcceptDto.isAccept()) {
             relationship.setRelationshipStatus(RelationshipStatus.REFUSE);
             relationshipRepository.save(relationship);
-            return Collections.singletonMap("accept", false);
+            return SuccessDto.builder().success(false).build();
         }
 
         if (relationship.getRelationshipStatus().equals(RelationshipStatus.REQUEST)) {
             relationship.setRelationshipStatus(RelationshipStatus.FRIEND);
             relationshipRepository.save(relationship);
             saveRequestUserRelationship(requestEmail, userEmail);
-            return Collections.singletonMap("accept", true);
+            return SuccessDto.builder().success(true).build();
         }
-        return Collections.singletonMap("accept", false);
+        return SuccessDto.builder().success(false).build();
     }
 
     private void saveRequestUserRelationship(String userEmail, String requestEmail) {

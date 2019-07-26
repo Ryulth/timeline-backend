@@ -1,8 +1,8 @@
-package com.ryulth.sns.friend.controller;
+package com.ryulth.sns.account.controller;
 
-import com.ryulth.sns.friend.dto.FriendRequestDto;
-import com.ryulth.sns.friend.service.FriendsRequestsSendService;
-import com.ryulth.sns.friend.service.RelationshipBlockException;
+import com.ryulth.sns.account.dto.FriendRequestDto;
+import com.ryulth.sns.account.service.friend.FriendsRequestsSendService;
+import com.ryulth.sns.account.service.friend.RelationshipBlockException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

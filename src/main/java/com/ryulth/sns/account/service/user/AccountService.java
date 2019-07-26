@@ -1,4 +1,4 @@
-package com.ryulth.sns.account.service;
+package com.ryulth.sns.account.service.user;
 
 import com.ryulth.sns.account.dto.LoginDto;
 import com.ryulth.sns.account.dto.RegisterDto;

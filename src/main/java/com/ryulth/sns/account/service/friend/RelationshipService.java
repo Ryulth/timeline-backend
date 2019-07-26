@@ -1,11 +1,12 @@
-package com.ryulth.sns.friend.service;
+package com.ryulth.sns.account.service.friend;
 
+import com.ryulth.sns.account.dto.FriendsDto;
 import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.repository.UserRepository;
-import com.ryulth.sns.friend.dto.FriendInfoDto;
-import com.ryulth.sns.friend.entity.Relationship;
-import com.ryulth.sns.friend.entity.RelationshipStatus;
-import com.ryulth.sns.friend.repository.RelationshipRepository;
+import com.ryulth.sns.account.dto.FriendInfoDto;
+import com.ryulth.sns.account.entity.Relationship;
+import com.ryulth.sns.account.entity.RelationshipStatus;
+import com.ryulth.sns.account.repository.RelationshipRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class RelationshipService {
         this.relationshipRepository = relationshipRepository1;
     }
 
-    public List getSendFriendInfoByRelationships(List<Relationship> relationships) {
+    public FriendsDto getSendFriendInfoByRelationships(List<Relationship> relationships) {
         List<FriendInfoDto> friendInfoDtos = new ArrayList<>();
 
         for (Relationship relationship : relationships) {
@@ -35,10 +36,12 @@ public class RelationshipService {
             }
 
         }
-        return friendInfoDtos;
+        return FriendsDto.builder()
+                .friendInfoDtos(friendInfoDtos)
+                .build();
     }
 
-    public List getReceiveFriendInfoByRelationships(List<Relationship> relationships) {
+    public FriendsDto getReceiveFriendInfoByRelationships(List<Relationship> relationships) {
         List<FriendInfoDto> friendInfoDtos = new ArrayList<>();
 
         for (Relationship relationship : relationships) {
@@ -52,7 +55,9 @@ public class RelationshipService {
             }
 
         }
-        return friendInfoDtos;
+        return FriendsDto.builder()
+                .friendInfoDtos(friendInfoDtos)
+                .build();
     }
 
     private FriendInfoDto userToFriendInfoDto(User user,RelationshipStatus relationshipStatus){
@@ -66,7 +71,7 @@ public class RelationshipService {
                 .build();
     }
 
-    public List getFriendInfoByUserEmailAndUsers(String userEmail, List<User> usersByState) {
+    public FriendsDto getFriendInfoByUserEmailAndUsers(String userEmail, List<User> usersByState) {
         List<FriendInfoDto> friendInfoDtos = new ArrayList<>();
         for (User user : usersByState) {
             RelationshipStatus relationshipStatus = getRelationshipStatus(userEmail, user.getEmail());
@@ -84,7 +89,9 @@ public class RelationshipService {
             }
 
         }
-        return friendInfoDtos;
+        return FriendsDto.builder()
+                .friendInfoDtos(friendInfoDtos)
+                .build();
     }
     //TODO validation check logic refactor
     private RelationshipStatus getRelationshipStatus(String userEmail, String friendEmail) {
