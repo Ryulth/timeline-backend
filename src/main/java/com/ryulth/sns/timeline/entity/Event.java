@@ -45,7 +45,7 @@ public class Event {
     @Column(name = "event_is_public", columnDefinition = "TINYINT(1)")
     private int isPublic;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "event_id")
     private List<EventFile> eventFiles;
 
