@@ -2,6 +2,7 @@ package com.ryulth.sns.account.service.user;
 
 import com.ryulth.sns.account.dto.LoginDto;
 import com.ryulth.sns.account.dto.RegisterDto;
+import com.ryulth.sns.account.dto.TokenDto;
 import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.exception.EmailNotFoundException;
 import com.ryulth.sns.account.repository.UserRepository;
@@ -28,7 +29,7 @@ public class AccountService {
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    public Map<String, Object> register(RegisterDto registerDto) {
+    public TokenDto register(RegisterDto registerDto) {
         if (duplicateEmail(registerDto.getEmail())) {
             throw new EntityExistsException("Email is duplicated");
         }
@@ -51,7 +52,7 @@ public class AccountService {
         return userRepository.existsByEmail(userEmail);
     }
 
-    public Map<String, Object> login(LoginDto loginDto) {
+    public TokenDto login(LoginDto loginDto) {
         User user = userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(EmailNotFoundException::new);
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
@@ -60,7 +61,7 @@ public class AccountService {
         return getToken(user);
     }
 
-    public Map<String, Object> updateAccessToken(String refreshToken) throws IllegalAccessException {
+    public TokenDto updateAccessToken(String refreshToken) throws IllegalAccessException {
         String email = tokenService.getEmailFromRefreshToken(refreshToken);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(EmailNotFoundException::new);
@@ -68,7 +69,7 @@ public class AccountService {
         return getToken(user);
     }
 
-    private Map<String, Object> getToken(User user) {
+    private TokenDto getToken(User user) {
         Map<String, Object> body = Stream.of(
                 new AbstractMap.SimpleEntry<>("email", user.getEmail()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

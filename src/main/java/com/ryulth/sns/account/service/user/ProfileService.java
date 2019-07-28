@@ -7,8 +7,6 @@ import com.ryulth.sns.account.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
-import java.util.Map;
 
 @Service
 public class ProfileService {
@@ -18,23 +16,13 @@ public class ProfileService {
         this.userRepository = userRepository;
     }
 
-    public Map<String, Object> getProfile(String email){
+    public UserInfoDto getProfile(String email){
         User user =userRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
-
-        UserInfoDto userInfoDto = UserInfoDto.builder()
-                .email(user.getEmail())
-                .school(user.getSchool())
-                .state(user.getState())
-                .username(user.getUsername())
-                .birth(user.getBirth())
-                .imageUrl(user.getImageUrl())
-                .build();
-
-        return Collections.singletonMap("user",userInfoDto);
+        return getUserInfoDtoByUser(user);
     }
 
-    public Map<String, Object> editProfile(String email, UserEditDto userEditDto){
+    public UserInfoDto editProfile(String email, UserEditDto userEditDto){
         User user =userRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -50,7 +38,17 @@ public class ProfileService {
                 .build();
 
         userRepository.save(editUser);
+        return getUserInfoDtoByUser(editUser);
+    }
 
-        return Collections.singletonMap("edit",true);
+    private UserInfoDto getUserInfoDtoByUser(User user){
+        return UserInfoDto.builder()
+                .email(user.getEmail())
+                .school(user.getSchool())
+                .state(user.getState())
+                .username(user.getUsername())
+                .birth(user.getBirth())
+                .imageUrl(user.getImageUrl())
+                .build();
     }
 }

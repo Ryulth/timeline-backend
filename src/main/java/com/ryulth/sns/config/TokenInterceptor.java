@@ -1,4 +1,4 @@
-package com.ryulth.sns.timeline.security;
+package com.ryulth.sns.config;
 
 import com.ryulth.sns.account.service.user.JwtService;
 import org.springframework.stereotype.Component;
