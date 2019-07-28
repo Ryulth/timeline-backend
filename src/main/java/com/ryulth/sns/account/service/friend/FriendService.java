@@ -8,6 +8,7 @@ import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.repository.RelationshipRepository;
 import com.ryulth.sns.account.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -44,13 +45,15 @@ public class FriendService {
         return relationshipService.getReceiveFriendInfoByRelationships(relationships);
     }
 
+    @Transactional
     public SuccessDto deleteFriend(String userEmail, String requestEmail){
         try {
             relationshipRepository.deleteByUserEmailAndRequestEmail(userEmail,requestEmail);
             relationshipRepository.deleteByUserEmailAndRequestEmail(requestEmail,userEmail);
             return SuccessDto.builder().success(true).build();
-        }catch (Exception e){
-            return SuccessDto.builder().success(false).build();
+        }
+        catch (Exception e){
+            throw e;
         }
     }
 }

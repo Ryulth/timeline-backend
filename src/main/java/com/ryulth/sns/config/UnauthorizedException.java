@@ -1,4 +1,4 @@
-package com.ryulth.sns.timeline.security;
+package com.ryulth.sns.config;
 
 public class UnauthorizedException extends RuntimeException{
 

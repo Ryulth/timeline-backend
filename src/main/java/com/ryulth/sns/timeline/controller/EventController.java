@@ -2,7 +2,7 @@ package com.ryulth.sns.timeline.controller;
 
 
 import com.ryulth.sns.timeline.dto.NewEventDto;
-import com.ryulth.sns.timeline.security.UnauthorizedException;
+import com.ryulth.sns.config.UnauthorizedException;
 import com.ryulth.sns.timeline.service.EventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
