@@ -22,6 +22,9 @@ public class EventFile {
     @Column(name = "event_file_id")
     private Long id;
 
+    @Column(name = "event_id")
+    private Long eventId;
+
     @Column(name = "event_image_thumbUrl")
     private String thumbUrl;
 

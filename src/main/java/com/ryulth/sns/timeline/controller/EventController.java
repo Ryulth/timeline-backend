@@ -63,4 +63,23 @@ public class EventController {
         }
     }
 
+    @DeleteMapping("events/{eventId}")
+    @ApiOperation(value = "Delete Event API", notes = "이벤트 ID 로 지운다.")
+    public ResponseEntity deleteEvent(
+            HttpServletRequest httpServletRequest,
+            @PathVariable("eventId") Long eventId
+    ) {
+        try {
+            String accessEmail = httpServletRequest.getSession().getAttribute("email").toString();
+            return new ResponseEntity<>(eventService.deleteEvent(eventId, accessEmail), httpHeaders, HttpStatus.OK);
+        } catch (UnauthorizedException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.UNAUTHORIZED);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

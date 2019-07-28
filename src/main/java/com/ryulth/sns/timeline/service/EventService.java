@@ -1,6 +1,5 @@
 package com.ryulth.sns.timeline.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.repository.UserRepository;
 import com.ryulth.sns.timeline.dto.EventDto;
@@ -8,6 +7,7 @@ import com.ryulth.sns.timeline.dto.EventFileDto;
 import com.ryulth.sns.timeline.dto.NewEventDto;
 import com.ryulth.sns.timeline.entity.Event;
 import com.ryulth.sns.timeline.entity.EventFile;
+import com.ryulth.sns.timeline.repository.EventFileRepository;
 import com.ryulth.sns.timeline.repository.EventRepository;
 import com.ryulth.sns.timeline.security.UnauthorizedException;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,13 @@ import java.util.Map;
 @Service
 public class EventService {
     private final EventRepository eventRepository;
-    private final ObjectMapper objectMapper;
+    private final EventFileRepository eventFileRepository;
     private final UserRepository userRepository;
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+
+    public EventService(EventRepository eventRepository, EventFileRepository eventFileRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
+        this.eventFileRepository = eventFileRepository;
         this.userRepository = userRepository;
-        this.objectMapper = new ObjectMapper();
     }
 
     public Map<String, Object> registerEvent(NewEventDto newEventDto, String authorEmail) {
@@ -89,5 +90,17 @@ public class EventService {
                 .build();
 
         return eventDto;
+    }
+
+    public Map<String, Object> deleteEvent(long eventId, String accessEmail){
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        if(accessEmail.equals(event.getAuthorEmail())){
+            eventRepository.deleteById(eventId);
+            eventFileRepository.deleteAllByEventId(eventId);
+            return Collections.singletonMap("delete",true);
+        }
+        throw new UnauthorizedException("NOT AUTHOR EMAIL");
     }
 }
