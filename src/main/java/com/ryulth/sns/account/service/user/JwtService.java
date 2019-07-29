@@ -51,13 +51,13 @@ public class JwtService implements TokenService {
 
     @Override
     public String getEmailFromAccessToken(String token) throws IllegalAccessException {
-        return getEmailFromToken(token,accessSecretKey);
+        String tokenBody = token.replace("bearer ","");
+        return getEmailFromToken(tokenBody,accessSecretKey);
     }
     private String getEmailFromToken(String token,String secretKey) throws IllegalAccessException {
         try {
-            String tokenBody = token.replace("bearer ","");
             Claims claims = Jwts.parser().setSigningKey(this.generateKey(secretKey))
-                    .parseClaimsJws(tokenBody).getBody(); // 정상 수행된다면 해당 토큰은 정상토큰
+                    .parseClaimsJws(token).getBody(); // 정상 수행된다면 해당 토큰은 정상토큰
             return claims.get("email").toString();
         } catch (JwtException e) {
             throw new IllegalAccessException(e.getMessage());

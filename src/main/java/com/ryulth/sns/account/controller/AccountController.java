@@ -73,13 +73,15 @@ public class AccountController {
         }
     }
 
-    @GetMapping("accounts/refresh/{token}")
+    @GetMapping("accounts/refresh/{token:.+}")
     @ApiOperation(value = "Update Access Token API", notes = "refresh_token 을 보내면 access_token 을 반환해주는 API. (Authorization Header 필요 없습니다. Swagger 전역 설정 원인)")
     public ResponseEntity updateAccessToken(
             @PathVariable("token") String refreshToken) {
         try {
+            System.out.println(refreshToken);
             return new ResponseEntity<>(accountService.updateAccessToken(refreshToken), httpHeaders, HttpStatus.OK);
         } catch (IllegalAccessException | EmailNotFoundException e) {
+            log.error(e.toString());
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
         } catch (Exception e) {
             log.error(e.toString());
