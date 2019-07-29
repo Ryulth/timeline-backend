@@ -21,6 +21,17 @@ public class WebConfig implements WebMvcConfigurer{
             "/profile/**"
     };
 
+    private static final String[] EXCLUDE_PATHS = {
+            "/static/**",
+            "swagger-ui.html",
+            "/webjars/**",
+            "/v2/api-docs",
+            "/configuration/security",
+            "/configuration/ui",
+            "/swagger-resources",
+            "/","/csrf"
+    };
+
     private final TokenInterceptor tokenInterceptor;
 
     public WebConfig(TokenInterceptor tokenInterceptor) {
@@ -30,7 +41,8 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns(INCLUDE_PATHS);
+                .addPathPatterns(INCLUDE_PATHS)
+                .excludePathPatterns(EXCLUDE_PATHS);
     }
 
     @Override
