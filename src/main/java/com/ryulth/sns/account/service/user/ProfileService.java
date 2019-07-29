@@ -30,7 +30,7 @@ public class ProfileService {
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
-                .username(userEditDto.getUsername())
+                .username(user.getUsername())
                 .state(userEditDto.getState())
                 .school(userEditDto.getSchool())
                 .birth(userEditDto.getBirth())
