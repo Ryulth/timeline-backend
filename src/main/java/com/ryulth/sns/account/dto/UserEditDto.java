@@ -13,7 +13,6 @@ public class UserEditDto {
     protected UserEditDto() {
     }
 
-    private String username;
     private String state;
     private String school;
     private String birth;
