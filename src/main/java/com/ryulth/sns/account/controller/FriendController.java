@@ -61,7 +61,7 @@ public class FriendController {
         }
     }
 
-    @DeleteMapping("friends/{requestEmail}")
+    @DeleteMapping("friends/{requestEmail:.+}")
     @ApiOperation(value = "Friend delete API", notes = "친구 삭제")
     public ResponseEntity deleteFriends(
             HttpServletRequest httpServletRequest,
