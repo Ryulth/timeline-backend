@@ -71,9 +71,4 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 
     compile 'com.amazonaws:aws-java-sdk-s3'
-
-    compile 'org.springframework.security:spring-security-web:5.1.5.RELEASE'
-    compile 'org.springframework.security:spring-security-config:5.1.5.RELEASE'
-
-
 }
