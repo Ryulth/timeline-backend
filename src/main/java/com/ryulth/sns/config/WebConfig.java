@@ -30,8 +30,7 @@ public class WebConfig implements WebMvcConfigurer{
             "/v2/api-docs",
             "/configuration/security",
             "/configuration/ui",
-            "/swagger-resources",
-            "/","/csrf"
+            "/swagger-resources"
     };
 
     private final TokenInterceptor tokenInterceptor;
