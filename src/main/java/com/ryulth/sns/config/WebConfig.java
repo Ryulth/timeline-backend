@@ -2,10 +2,7 @@ package com.ryulth.sns.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 @EnableWebMvc
@@ -25,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer{
 
     private static final String[] EXCLUDE_PATHS = {
             "/static/**",
-            "/swagger-ui.html",
+            "swagger-ui.html",
             "/webjars/**",
             "/v2/api-docs",
             "/configuration/security",
@@ -42,8 +39,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns(INCLUDE_PATHS)
-                .excludePathPatterns(EXCLUDE_PATHS);
+                .addPathPatterns(INCLUDE_PATHS);
     }
 
     @Override
@@ -54,5 +50,17 @@ public class WebConfig implements WebMvcConfigurer{
                 .allowedOrigins(origin)
                 .allowCredentials(false)
                 .maxAge(3600);
+    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations("/WEB-INF/resources/");
+
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
     }
 }
