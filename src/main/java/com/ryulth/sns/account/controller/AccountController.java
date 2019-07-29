@@ -57,7 +57,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("accounts/duplicate/{email}")
+    @GetMapping("accounts/duplicate/{email:.+}")
     @ApiOperation(value = "Duplicate API", notes = "회원가입시 회원 아이디(email) 중복 체크하는 API. (Authorization Header 필요 없습니다. Swagger 전역 설정 원인)")
     public ResponseEntity duplicate(
             @PathVariable("email") String email) {
@@ -78,7 +78,6 @@ public class AccountController {
     public ResponseEntity updateAccessToken(
             @PathVariable("token") String refreshToken) {
         try {
-            System.out.println(refreshToken);
             return new ResponseEntity<>(accountService.updateAccessToken(refreshToken), httpHeaders, HttpStatus.OK);
         } catch (IllegalAccessException | EmailNotFoundException e) {
             log.error(e.toString());

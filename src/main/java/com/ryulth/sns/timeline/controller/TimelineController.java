@@ -29,7 +29,7 @@ public class TimelineController {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
     }
 
-    @GetMapping("timeline/{authorEmail}")
+    @GetMapping("timeline/{authorEmail:.+}")
     @ApiOperation(value = "Get Timeline API", notes = "각 유저의 타임라인을 가져온다.")
     public ResponseEntity getUserTimeline(
             HttpServletRequest httpServletRequest,

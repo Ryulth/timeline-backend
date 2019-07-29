@@ -42,7 +42,7 @@ public class FriendsRequestsReceiveController {
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PutMapping("friends/requests/receives/{requestEmail}")
+    @PutMapping("friends/requests/receives/{requestEmail:.+}")
     @ApiOperation(value = "Friend accept API", notes = "친구 수락 / 거절")
     public ResponseEntity acceptFriends(
             HttpServletRequest httpServletRequest,

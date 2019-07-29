@@ -60,7 +60,7 @@ public class FriendsRequestsSendController {
         }
     }
 
-    @DeleteMapping("friends/requests/sends/{requestEmail}")
+    @DeleteMapping("friends/requests/sends/{requestEmail:.+}}")
     @ApiOperation(value = "Friend request send API", notes = "친구 신청")
     public ResponseEntity requestFriends(
             HttpServletRequest httpServletRequest,
