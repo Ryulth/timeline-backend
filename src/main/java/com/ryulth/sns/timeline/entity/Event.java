@@ -54,5 +54,6 @@ public class Event {
         this.hits = 0;
         this.isPublic = 1;
         this.createTime = Calendar.getInstance();
+        this.updateTime = Calendar.getInstance();
     }
 }

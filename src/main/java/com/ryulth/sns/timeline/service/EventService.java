@@ -13,6 +13,7 @@ import com.ryulth.sns.timeline.repository.EventRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +22,12 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EventFileRepository eventFileRepository;
     private final UserRepository userRepository;
-
+    private final SimpleDateFormat simpleDateFormat;
     public EventService(EventRepository eventRepository, EventFileRepository eventFileRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.eventFileRepository = eventFileRepository;
         this.userRepository = userRepository;
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     }
 
     public EventDto registerEvent(NewEventDto newEventDto, String authorEmail) {
@@ -82,13 +84,15 @@ public class EventService {
         User user = userRepository.findByEmail(event.getAuthorEmail())
                 .orElseThrow(EntityNotFoundException::new);
 
+
+
         EventDto eventDto = EventDto.builder()
                 .id(event.getId())
                 .authorEmail(event.getAuthorEmail())
                 .authorUsername(user.getUsername())
                 .content(event.getContent())
-                .createTime(event.getCreateTime())
-                .updateTime(event.getUpdateTime())
+                .createTime(simpleDateFormat.format(event.getCreateTime().getTime()))
+                .updateTime(simpleDateFormat.format(event.getUpdateTime().getTime()))
                 .hits(event.getHits())
                 .isPublic(event.getIsPublic())
                 .files(eventFileDtos)

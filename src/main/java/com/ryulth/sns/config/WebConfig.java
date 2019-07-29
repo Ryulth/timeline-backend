@@ -20,16 +20,6 @@ public class WebConfig implements WebMvcConfigurer{
             "/profile/**"
     };
 
-    private static final String[] EXCLUDE_PATHS = {
-            "/static/**",
-            "swagger-ui.html",
-            "/webjars/**",
-            "/v2/api-docs",
-            "/configuration/security",
-            "/configuration/ui",
-            "/swagger-resources"
-    };
-
     private final TokenInterceptor tokenInterceptor;
 
     public WebConfig(TokenInterceptor tokenInterceptor) {

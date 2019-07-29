@@ -14,13 +14,15 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class EventDto {
-    protected EventDto(){}
+    protected EventDto() {
+    }
+
     private Long id;
     private String authorEmail;
     private String authorUsername;
     private String content;
-    private Calendar createTime;
-    private Calendar updateTime;
+    private String createTime;
+    private String updateTime;
     private int hits;
     private int isPublic;
     @JsonProperty("files")
