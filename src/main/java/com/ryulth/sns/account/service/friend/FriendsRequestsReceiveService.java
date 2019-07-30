@@ -6,6 +6,8 @@ import com.ryulth.sns.account.dto.SuccessDto;
 import com.ryulth.sns.account.entity.Relationship;
 import com.ryulth.sns.account.entity.RelationshipStatus;
 import com.ryulth.sns.account.repository.RelationshipRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -27,20 +29,19 @@ public class FriendsRequestsReceiveService {
         return relationshipService.getReceiveFriendInfoByRelationships(relationships);
     }
 
-    public SuccessDto editFriendsRequestsReceive(String userEmail, String requestEmail, FriendAcceptDto friendAcceptDto) {
+
+    public SuccessDto acceptFriendsRequestsReceive(String userEmail, String requestEmail, FriendAcceptDto friendAcceptDto) {
         Relationship relationship =
                 relationshipRepository.findByUserEmailAndRequestEmail(requestEmail, userEmail)
                         .orElseThrow(EntityNotFoundException::new);
 
         if (!friendAcceptDto.isAccept()) {
-            relationship.setRelationshipStatus(RelationshipStatus.REFUSE);
-            relationshipRepository.save(relationship);
+            relationshipService.refuseRelationshipStatus(relationship);
             return SuccessDto.builder().success(false).build();
         }
 
         if (relationship.getRelationshipStatus().equals(RelationshipStatus.REQUEST)) {
-            relationship.setRelationshipStatus(RelationshipStatus.FRIEND);
-            relationshipRepository.save(relationship);
+            relationshipService.friendRelationshipStatus(relationship);
             saveRequestUserRelationship(requestEmail, userEmail);
             return SuccessDto.builder().success(true).build();
         }
@@ -55,8 +56,7 @@ public class FriendsRequestsReceiveService {
                         .requestEmail(userEmail)
                         .relationshipStatus(RelationshipStatus.FRIEND)
                         .build());
-        relationship.setRelationshipStatus(RelationshipStatus.FRIEND);
-        relationshipRepository.save(relationship);
+        relationshipService.friendRelationshipStatus(relationship);
     }
 }
 

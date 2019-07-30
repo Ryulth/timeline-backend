@@ -7,6 +7,9 @@ import com.ryulth.sns.account.entity.RelationshipStatus;
 import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.repository.RelationshipRepository;
 import com.ryulth.sns.account.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ public class FriendService {
         this.relationshipService = relationshipService;
     }
 
+    @Cacheable(value = "friends.recommend" , key = "#userEmail")
     public FriendsDto recommendFriends(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(EntityNotFoundException::new);
@@ -38,7 +42,9 @@ public class FriendService {
         return relationshipService.getFriendInfoByUserEmailAndUsers(userEmail, usersByState);
     }
 
+    @Cacheable(value = "friends", key = "#userEmail")
     public FriendsDto getFriends(String userEmail) {
+        System.out.println("my friends");
         List<Relationship> relationships =
                 relationshipRepository.findAllByRequestEmailAndRelationshipStatus(userEmail, RelationshipStatus.FRIEND);
 
@@ -46,13 +52,13 @@ public class FriendService {
     }
 
     @Transactional
-    public SuccessDto deleteFriend(String userEmail, String requestEmail){
+    @CacheEvict(value = "friends", key = "#userEmail")
+    public SuccessDto deleteFriend(String userEmail, String requestEmail) {
         try {
-            relationshipRepository.deleteByUserEmailAndRequestEmail(userEmail,requestEmail);
-            relationshipRepository.deleteByUserEmailAndRequestEmail(requestEmail,userEmail);
+            relationshipRepository.deleteByUserEmailAndRequestEmail(userEmail, requestEmail);
+            relationshipRepository.deleteByUserEmailAndRequestEmail(requestEmail, userEmail);
             return SuccessDto.builder().success(true).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
     }

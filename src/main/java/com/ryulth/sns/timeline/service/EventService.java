@@ -11,6 +11,8 @@ import com.ryulth.sns.timeline.entity.Event;
 import com.ryulth.sns.timeline.entity.EventFile;
 import com.ryulth.sns.timeline.repository.EventFileRepository;
 import com.ryulth.sns.timeline.repository.EventRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -63,6 +65,7 @@ public class EventService {
         }
         return getEventDtoByEvent(event);
     }
+
     public EventDto deleteEvent(long eventId, String accessEmail){
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(EntityNotFoundException::new);
@@ -105,7 +108,5 @@ public class EventService {
 
         return eventDto;
     }
-
-
 
 }

@@ -7,6 +7,7 @@ import com.ryulth.sns.timeline.dto.EventDto;
 import com.ryulth.sns.timeline.dto.TimelineDto;
 import com.ryulth.sns.timeline.entity.Event;
 import com.ryulth.sns.timeline.repository.EventRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,7 +29,7 @@ public class TimelineService {
     }
 
     public TimelineDto getUserTimeline(String accessEmail, String authorEmail, int page) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         List<Event> events = eventRepository.findByAuthorEmail(authorEmail, pageable);
 
         if (!accessEmail.equals(authorEmail)) {
@@ -45,7 +46,7 @@ public class TimelineService {
             authorEmails.add(friendInfoDto.getEmail());
         }
 
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         List<Event> events = eventRepository.findByAuthorEmailIn(authorEmails, pageable);
 
         events.removeIf(event -> !event.getAuthorEmail().equals(accessEmail) && event.getIsPublic() == 0);
