@@ -1,6 +1,7 @@
 package com.ryulth.sns.account.service.friend;
 
 import com.ryulth.sns.account.dto.FriendsDto;
+import com.ryulth.sns.account.dto.ProfileImageDto;
 import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.repository.UserRepository;
 import com.ryulth.sns.account.dto.FriendInfoDto;
@@ -31,7 +32,7 @@ public class RelationshipService {
             ).orElse(null);
             if (user != null) {
                 friendInfoDtos.add(
-                        userToFriendInfoDto(user,relationship.getRelationshipStatus())
+                        userToFriendInfoDto(user, relationship.getRelationshipStatus())
                 );
             }
 
@@ -50,7 +51,7 @@ public class RelationshipService {
             ).orElse(null);
             if (user != null) {
                 friendInfoDtos.add(
-                        userToFriendInfoDto(user,relationship.getRelationshipStatus())
+                        userToFriendInfoDto(user, relationship.getRelationshipStatus())
                 );
             }
 
@@ -60,8 +61,12 @@ public class RelationshipService {
                 .build();
     }
 
-    private FriendInfoDto userToFriendInfoDto(User user,RelationshipStatus relationshipStatus){
+    private FriendInfoDto userToFriendInfoDto(User user, RelationshipStatus relationshipStatus) {
         return FriendInfoDto.builder()
+                .profileImageDto(ProfileImageDto.builder()
+                        .url(user.getImageUrl())
+                        .thumbUrl(user.getThumbImageUrl())
+                        .build())
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .state(user.getState())
@@ -78,6 +83,10 @@ public class RelationshipService {
             if (relationshipStatus.equals(RelationshipStatus.NONE)) {
                 friendInfoDtos.add(
                         FriendInfoDto.builder()
+                                .profileImageDto(ProfileImageDto.builder()
+                                        .url(user.getImageUrl())
+                                        .thumbUrl(user.getThumbImageUrl())
+                                        .build())
                                 .email(user.getEmail())
                                 .username(user.getUsername())
                                 .state(user.getState())
@@ -93,6 +102,7 @@ public class RelationshipService {
                 .friendInfoDtos(friendInfoDtos)
                 .build();
     }
+
     //TODO validation check logic refactor
     private RelationshipStatus getRelationshipStatus(String userEmail, String friendEmail) {
         Relationship relationship =
@@ -100,10 +110,10 @@ public class RelationshipService {
         if (relationship == null) {
             Relationship friendRelationship =
                     relationshipRepository.findByUserEmailAndRequestEmail(friendEmail, userEmail).orElse(null);
-            if(friendRelationship == null){
+            if (friendRelationship == null) {
                 return RelationshipStatus.NONE;
             }
-                return friendRelationship.getRelationshipStatus();
+            return friendRelationship.getRelationshipStatus();
         }
         return relationship.getRelationshipStatus();
     }

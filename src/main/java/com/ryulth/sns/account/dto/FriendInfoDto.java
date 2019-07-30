@@ -20,4 +20,6 @@ public class FriendInfoDto {
     private String birth;
     @JsonProperty("relationship")
     private RelationshipStatus relationshipStatus;
+    @JsonProperty("profileImage")
+    private ProfileImageDto profileImageDto;
 }

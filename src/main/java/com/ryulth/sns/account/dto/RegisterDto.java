@@ -1,5 +1,6 @@
 package com.ryulth.sns.account.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +18,6 @@ public class RegisterDto {
     private String state;
     private String school;
     private String birth;
-    private String imageUrl;
+    @JsonProperty("profileImage")
+    private ProfileImageDto profileImageDto;
 }
