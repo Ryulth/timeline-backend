@@ -22,29 +22,29 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_email",unique = true)
+    @Column(name = "user_email",unique = true ,nullable = false)
     private String email;
 
-    @Column(name = "user_name")
-    private String username;
+    @Column(name = "user_name",nullable = false)
+    private String username ;
 
-    @Column(name = "user_password")
-    private String password;
+    @Column(name = "user_password",nullable = false)
+    private String password ;
 
-    @Column(name = "user_state")
-    private String state;
+    @Column(name = "user_state" ,nullable = false)
+    private String state ;
 
-    @Column(name = "user_school")
-    private String school;
+    @Column(name = "user_school" ,nullable = false)
+    private String school = "";
 
-    @Column(name = "user_birth")
+    @Column(name = "user_birth" ,nullable = false)
     private String birth;
 
     @Lob
-    @Column(name = "user_thumb_image_url")
-    private String thumbImageUrl;
+    @Column(name = "user_thumb_image_url",nullable = false)
+    private String thumbImageUrl = "";
 
     @Lob
-    @Column(name = "user_image_url")
-    private String imageUrl;
+    @Column(name = "user_image_url" , nullable = false)
+    private String imageUrl = "";
 }

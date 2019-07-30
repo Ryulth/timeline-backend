@@ -38,6 +38,8 @@ public class EventController {
         try {
             String email = httpServletRequest.getSession().getAttribute("email").toString();
             return new ResponseEntity<>(eventService.registerEvent(newEventDto, email), httpHeaders, HttpStatus.CREATED);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", "REQUEST FIELD ERROR"), httpHeaders, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);

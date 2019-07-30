@@ -37,7 +37,10 @@ public class AccountController {
             return new ResponseEntity<>(accountService.register(registerDto), httpHeaders, HttpStatus.OK);
         } catch (EntityExistsException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.CONFLICT);
-        } catch (Exception e) {
+        }catch (NullPointerException e){
+            return new ResponseEntity<>(Collections.singletonMap("error", "REQUEST FIELD ERROR"), httpHeaders, HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
             log.error(e.toString());
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }

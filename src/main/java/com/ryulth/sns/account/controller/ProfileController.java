@@ -54,6 +54,8 @@ public class ProfileController {
             return new ResponseEntity<>(profileService.editProfile(accessEmail, userEditDto), httpHeaders, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", "EMAIL NOT FOUND"), httpHeaders, HttpStatus.FORBIDDEN);
+        } catch (NullPointerException e) {
+            return new ResponseEntity<>(Collections.singletonMap("error", "REQUEST FIELD ERROR"), httpHeaders, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(Collections.singletonMap("error", "INTERNAL SERVER ERROR"), httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);

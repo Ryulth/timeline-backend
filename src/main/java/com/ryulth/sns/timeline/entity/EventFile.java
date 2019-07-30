@@ -26,11 +26,11 @@ public class EventFile {
     private Long eventId;
 
     @Lob
-    @Column(name = "event_image_thumbUrl")
+    @Column(name = "event_image_thumbUrl",nullable = false)
     private String thumbUrl;
 
     @Lob
-    @Column(name = "event_image_url")
+    @Column(name = "event_image_url",nullable = false)
     private String url;
 
 }
