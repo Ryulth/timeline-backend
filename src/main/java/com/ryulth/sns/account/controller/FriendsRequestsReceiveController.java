@@ -51,7 +51,7 @@ public class FriendsRequestsReceiveController {
     ) {
         try {
             String email = httpServletRequest.getSession().getAttribute("email").toString();
-            return new ResponseEntity<>(friendsRequestsReceiveService.editFriendsRequestsReceive(email,requestEmail,friendAcceptDto), httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(friendsRequestsReceiveService.acceptFriendsRequestsReceive(email,requestEmail,friendAcceptDto), httpHeaders, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.FORBIDDEN);
         } catch (Exception e) {

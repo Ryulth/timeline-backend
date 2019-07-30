@@ -8,6 +8,7 @@ import com.ryulth.sns.account.dto.FriendInfoDto;
 import com.ryulth.sns.account.entity.Relationship;
 import com.ryulth.sns.account.entity.RelationshipStatus;
 import com.ryulth.sns.account.repository.RelationshipRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -116,5 +117,16 @@ public class RelationshipService {
             return friendRelationship.getRelationshipStatus();
         }
         return relationship.getRelationshipStatus();
+    }
+
+    public void refuseRelationshipStatus(Relationship relationship){
+        relationship.setRelationshipStatus(RelationshipStatus.REFUSE);
+        relationshipRepository.save(relationship);
+    }
+
+    @CacheEvict(value = "friends", key = "#relationship.getUserEmail()")
+    public void friendRelationshipStatus(Relationship relationship){
+        relationship.setRelationshipStatus(RelationshipStatus.FRIEND);
+        relationshipRepository.save(relationship);
     }
 }
