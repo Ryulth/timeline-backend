@@ -10,6 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ProfileImageDto {
+    protected ProfileImageDto(){}
     private String thumbUrl;
     private String url;
 }

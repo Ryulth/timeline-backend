@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,12 +27,12 @@ public class Event {
     @Column(name = "event_id")
     private Long id;
 
-    @Column(name = "event_author_email")
-    private String authorEmail;
+    @Column(name = "event_author_email",nullable = false)
+    private String authorEmail = "";
 
     @Lob
-    @Column(name = "event_content")
-    private String content;
+    @Column(name = "event_content" ,nullable = false)
+    private String content = "";
 
     @Column(name = "event_create_time", nullable = false, updatable = false)
     private Calendar createTime;

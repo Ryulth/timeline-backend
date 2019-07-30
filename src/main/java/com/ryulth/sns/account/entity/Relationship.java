@@ -22,12 +22,12 @@ public class Relationship {
     @Column(name = "relationship_id")
     private Long id;
 
-    @Column(name = "relationship_user_email")
+    @Column(name = "relationship_user_email" ,nullable = false)
     private String userEmail;
-    @Column(name = "relationship_request_email")
+    @Column(name = "relationship_request_email" ,nullable = false)
     private String requestEmail;
 
-    @Column(name = "relationship_status")
+    @Column(name = "relationship_status",nullable = false)
     @Enumerated(EnumType.STRING)
     private RelationshipStatus relationshipStatus;
 
