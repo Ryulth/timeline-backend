@@ -1,6 +1,7 @@
 package com.ryulth.sns.timeline.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ryulth.sns.account.dto.ProfileImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,8 @@ public class EventDto {
     private Long id;
     private String authorEmail;
     private String authorUsername;
+    @JsonProperty("profileImage")
+    private ProfileImageDto profileImageDto;
     private String content;
     private String createTime;
     private String updateTime;

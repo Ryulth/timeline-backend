@@ -40,6 +40,11 @@ public class User {
     @Column(name = "user_birth")
     private String birth;
 
+    @Lob
+    @Column(name = "user_thumb_image_url")
+    private String thumbImageUrl;
+
+    @Lob
     @Column(name = "user_image_url")
     private String imageUrl;
 }

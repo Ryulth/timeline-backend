@@ -1,5 +1,6 @@
 package com.ryulth.sns.account.service.user;
 
+import com.ryulth.sns.account.dto.ProfileImageDto;
 import com.ryulth.sns.account.dto.UserEditDto;
 import com.ryulth.sns.account.dto.UserInfoDto;
 import com.ryulth.sns.account.entity.User;
@@ -34,7 +35,8 @@ public class ProfileService {
                 .state(userEditDto.getState())
                 .school(userEditDto.getSchool())
                 .birth(userEditDto.getBirth())
-                .imageUrl(userEditDto.getImageUrl())
+                .thumbImageUrl(userEditDto.getProfileImageDto().getThumbUrl())
+                .imageUrl(userEditDto.getProfileImageDto().getUrl())
                 .build();
 
         userRepository.save(editUser);
@@ -48,7 +50,10 @@ public class ProfileService {
                 .state(user.getState())
                 .username(user.getUsername())
                 .birth(user.getBirth())
-                .imageUrl(user.getImageUrl())
+                .profileImageDto(ProfileImageDto.builder()
+                        .url(user.getImageUrl())
+                        .thumbUrl(user.getThumbImageUrl())
+                        .build())
                 .build();
     }
 }

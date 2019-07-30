@@ -1,5 +1,6 @@
 package com.ryulth.sns.timeline.service;
 
+import com.ryulth.sns.account.dto.ProfileImageDto;
 import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.repository.UserRepository;
 import com.ryulth.sns.config.UnauthorizedException;
@@ -87,6 +88,10 @@ public class EventService {
 
 
         EventDto eventDto = EventDto.builder()
+                .profileImageDto(ProfileImageDto.builder()
+                        .url(user.getImageUrl())
+                        .thumbUrl(user.getThumbImageUrl())
+                        .build())
                 .id(event.getId())
                 .authorEmail(event.getAuthorEmail())
                 .authorUsername(user.getUsername())

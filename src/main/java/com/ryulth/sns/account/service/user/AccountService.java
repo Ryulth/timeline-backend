@@ -41,7 +41,8 @@ public class AccountService {
                 .state(registerDto.getState())
                 .school(registerDto.getSchool())
                 .birth(registerDto.getBirth())
-                .imageUrl(registerDto.getImageUrl())
+                .thumbImageUrl(registerDto.getProfileImageDto().getThumbUrl())
+                .imageUrl(registerDto.getProfileImageDto().getUrl())
                 .build();
 
         userRepository.save(user);
