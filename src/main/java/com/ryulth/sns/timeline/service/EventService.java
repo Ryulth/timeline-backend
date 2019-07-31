@@ -85,9 +85,7 @@ public class EventService {
         }
         User user = userRepository.findByEmail(event.getAuthorEmail())
                 .orElseThrow(EntityNotFoundException::new);
-
-
-        System.out.println(event.getCreateTime());
+        
         EventDto eventDto = EventDto.builder()
                 .profileImageDto(ProfileImageDto.builder()
                         .url(user.getImageUrl())
