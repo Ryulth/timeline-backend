@@ -14,22 +14,21 @@ import com.ryulth.sns.timeline.repository.EventRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class EventService {
     private final EventRepository eventRepository;
     private final EventFileRepository eventFileRepository;
     private final UserRepository userRepository;
-    private final SimpleDateFormat simpleDateFormat;
+    private final DateTimeFormatter dateTimeFormatter;
     public EventService(EventRepository eventRepository, EventFileRepository eventFileRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.eventFileRepository = eventFileRepository;
         this.userRepository = userRepository;
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     }
 
     public EventDto registerEvent(NewEventDto newEventDto, String authorEmail) {
@@ -88,7 +87,7 @@ public class EventService {
                 .orElseThrow(EntityNotFoundException::new);
 
 
-
+        System.out.println(event.getCreateTime());
         EventDto eventDto = EventDto.builder()
                 .profileImageDto(ProfileImageDto.builder()
                         .url(user.getImageUrl())
@@ -98,8 +97,8 @@ public class EventService {
                 .authorEmail(event.getAuthorEmail())
                 .authorUsername(user.getUsername())
                 .content(event.getContent())
-                .createTime(simpleDateFormat.format(event.getCreateTime().getTime()))
-                .updateTime(simpleDateFormat.format(event.getUpdateTime().getTime()))
+                .createTime(event.getCreateTime().format(dateTimeFormatter))
+                .updateTime(event.getUpdateTime().format(dateTimeFormatter))
                 .hits(event.getHits())
                 .isPublic(event.getIsPublic())
                 .files(eventFileDtos)
