@@ -2,6 +2,7 @@ package com.ryulth.sns.account.controller;
 
 import com.ryulth.sns.account.dto.LoginDto;
 import com.ryulth.sns.account.dto.RegisterDto;
+import com.ryulth.sns.account.exception.EmailInvalidException;
 import com.ryulth.sns.account.exception.EmailNotFoundException;
 import com.ryulth.sns.account.service.user.AccountService;
 import io.swagger.annotations.Api;
@@ -39,6 +40,8 @@ public class AccountController {
             return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.CONFLICT);
         }catch (NullPointerException e){
             return new ResponseEntity<>(Collections.singletonMap("error", "REQUEST FIELD ERROR"), httpHeaders, HttpStatus.BAD_REQUEST);
+        }catch (EmailInvalidException e){
+            return new ResponseEntity<>(Collections.singletonMap("error", e.getMessage()), httpHeaders, HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
             log.error(e.toString());

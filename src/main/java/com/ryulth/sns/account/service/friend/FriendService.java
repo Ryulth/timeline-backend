@@ -8,7 +8,6 @@ import com.ryulth.sns.account.entity.User;
 import com.ryulth.sns.account.repository.RelationshipRepository;
 import com.ryulth.sns.account.repository.UserRepository;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +43,6 @@ public class FriendService {
 
     @Cacheable(value = "friends", key = "#userEmail")
     public FriendsDto getFriends(String userEmail) {
-        System.out.println("my friends");
         List<Relationship> relationships =
                 relationshipRepository.findAllByRequestEmailAndRelationshipStatus(userEmail, RelationshipStatus.FRIEND);
 

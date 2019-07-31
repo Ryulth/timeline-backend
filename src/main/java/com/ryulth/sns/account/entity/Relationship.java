@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "relationship")
+@Table(name = "relationship",indexes = {@Index(columnList = "relationship_user_email"),@Index(columnList = "relationship_request_email")})
 @ToString
 public class Relationship {
     protected Relationship() {
