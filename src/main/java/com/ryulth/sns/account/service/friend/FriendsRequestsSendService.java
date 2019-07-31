@@ -6,6 +6,7 @@ import com.ryulth.sns.account.entity.Relationship;
 import com.ryulth.sns.account.entity.RelationshipStatus;
 import com.ryulth.sns.account.repository.RelationshipRepository;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,10 @@ public class FriendsRequestsSendService {
         return SuccessDto.builder().success(true).build();
     }
 
-    @CacheEvict(value = "friends.recommend" , key = "#userEmail")
+    @Caching(evict = {
+            @CacheEvict(value = "friends.recommend" , key = "#userEmail"),
+            @CacheEvict(value = "friends.recommend" , key = "#requestEmail")
+    })
     public SuccessDto makeFriendsRequestsSend(String userEmail, String requestEmail) {
         if (userEmail.equals(requestEmail)) {
             return SuccessDto.builder().success(false).build();
