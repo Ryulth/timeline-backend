@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "event")
+@Table(name = "event",indexes = {@Index(columnList = "event_author_email")})
 @ToString
 public class Event {
     protected Event() {

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "event_file")
+@Table(name = "event_file",indexes = {@Index(columnList = "event_id")})
 @ToString
 public class EventFile {
     protected EventFile() {

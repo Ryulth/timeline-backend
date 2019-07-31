@@ -4,6 +4,7 @@ import com.ryulth.sns.account.dto.LoginDto;
 import com.ryulth.sns.account.dto.RegisterDto;
 import com.ryulth.sns.account.dto.TokenDto;
 import com.ryulth.sns.account.entity.User;
+import com.ryulth.sns.account.exception.EmailInvalidException;
 import com.ryulth.sns.account.exception.EmailNotFoundException;
 import com.ryulth.sns.account.repository.UserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,11 +15,14 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityExistsException;
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class AccountService {
+    private static final Pattern emailPattern = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
@@ -33,7 +37,9 @@ public class AccountService {
         if (duplicateEmail(registerDto.getEmail())) {
             throw new EntityExistsException("Email is duplicated");
         }
-
+        if(!emailPattern.matcher(registerDto.getEmail()).matches()){
+            throw new EmailInvalidException("Email Invalid");
+        }
         User user = User.builder()
                 .email(registerDto.getEmail())
                 .username(registerDto.getUsername())
