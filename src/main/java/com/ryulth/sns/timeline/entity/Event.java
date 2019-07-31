@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -34,10 +34,10 @@ public class Event {
     private String content = "";
 
     @Column(name = "event_create_time", nullable = false, updatable = false)
-    private Calendar createTime;
+    private LocalDateTime createTime;
 
     @Column(name = "event_update_time")
-    private Calendar updateTime;
+    private LocalDateTime updateTime;
 
     @Column(name = "event_hits")
     private int hits;
@@ -53,7 +53,7 @@ public class Event {
     void setUp() {
         this.hits = 0;
         this.isPublic = 1;
-        this.createTime = Calendar.getInstance();
-        this.updateTime = Calendar.getInstance();
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
     }
 }
