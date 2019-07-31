@@ -11,14 +11,13 @@ import com.ryulth.sns.timeline.entity.Event;
 import com.ryulth.sns.timeline.entity.EventFile;
 import com.ryulth.sns.timeline.repository.EventFileRepository;
 import com.ryulth.sns.timeline.repository.EventRepository;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class EventService {
@@ -30,7 +29,7 @@ public class EventService {
         this.eventRepository = eventRepository;
         this.eventFileRepository = eventFileRepository;
         this.userRepository = userRepository;
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA);
     }
 
     public EventDto registerEvent(NewEventDto newEventDto, String authorEmail) {
